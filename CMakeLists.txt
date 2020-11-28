@@ -13,7 +13,7 @@ add_subdirectory(a)
 add_custom_command(
         OUTPUT index.h
         WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/c
-        COMMAND python3 preparing.py
+        COMMAND python preparing.py
         COMMENT "Generating c/index.h"
         VERBATIM
 )
