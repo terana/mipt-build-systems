@@ -1,2 +1,2 @@
-#include "a/lib.h"
-#include "c/index.h"
+#include "lib.h"
+#include "index.h"
