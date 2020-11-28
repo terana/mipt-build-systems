@@ -1,4 +1,6 @@
 /c/index.h
 .idea/
 Step*
+build
 cmake-build-debug/
+doc/*

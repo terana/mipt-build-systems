@@ -12,6 +12,13 @@ set(MAIN_SOURCE b/main.cpp)
 
 add_custom_target(Preparing DEPENDS include.h COMMENT "Checking if re-generation is required")
 
+add_custom_target(
+        doc ALL
+        COMMAND doxygen -g Doxyfile && doxygen Doxyfile
+        WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/doc
+        COMMENT "Generating documentation with Doxygen"
+)
+
 include_directories(a c)
 
 add_executable(BuildSystemsFun ${MAIN_SOURCE})
