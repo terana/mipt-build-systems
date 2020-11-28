@@ -2,40 +2,31 @@ cmake_minimum_required(VERSION 3.10)
 
 project(BuildSystemsFun CXX)
 
-add_custom_command(
-        OUTPUT include.h
-        COMMAND python3 ${PROJECT_SOURCE_DIR}/c/preparing.py ${PROJECT_SOURCE_DIR}
-        COMMENT "Generating a header."
-)
+find_package(Doxygen)
 
 set(MAIN_SOURCE b/main.cpp)
 
-add_custom_target(Preparing DEPENDS include.h COMMENT "Checking if re-generation is required")
+add_executable(BuildSystemsFun ${MAIN_SOURCE})
+add_subdirectory(a)
+
+add_custom_command(
+        OUTPUT index.h
+        WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/c
+        COMMAND python3 preparing.py
+        COMMENT "Generating c/index.h"
+        VERBATIM
+)
+add_custom_target(PreparingIndex DEPENDS index.h COMMENT "Checking if re-generation is required")
+add_dependencies(BuildSystemsFun PreparingIndex)
 
 add_custom_target(
         doc ALL
         COMMAND doxygen -g Doxyfile && doxygen Doxyfile
         WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/doc
         COMMENT "Generating documentation with Doxygen"
+        VERBATIM
 )
-
-include_directories(a c)
-
-add_executable(BuildSystemsFun ${MAIN_SOURCE})
-add_subdirectory(a)
-add_dependencies(BuildSystemsFun Preparing)
-
 
 target_compile_options(BuildSystemsFun PUBLIC -std=c++14)
 target_link_libraries(BuildSystemsFun PUBLIC ALibrary)
-target_include_directories(BuildSystemsFun INTERFACE
-        "${PROJECT_BINARY_DIR}/a"
-        "${PROJECT_BINARY_DIR}/b"
-        "${PROJECT_BINARY_DIR}/c"
-        )
-
-install(
-        TARGETS BuildSystemsFun
-        RUNTIME DESTINATION bin
-        LIBRARY DESTINATION lib
-)
+target_include_directories(BuildSystemsFun PUBLIC a b c)
