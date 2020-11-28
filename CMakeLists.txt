@@ -7,6 +7,7 @@ find_package(Doxygen)
 set(MAIN_SOURCE b/main.cpp)
 
 add_executable(BuildSystemsFun ${MAIN_SOURCE})
+
 add_subdirectory(a)
 
 add_custom_command(
@@ -29,4 +30,4 @@ add_custom_target(
 
 target_compile_options(BuildSystemsFun PUBLIC -std=c++14)
 target_link_libraries(BuildSystemsFun PUBLIC ALibrary)
-target_include_directories(BuildSystemsFun PUBLIC a b c)
+target_include_directories(BuildSystemsFun PUBLIC ${PROJECT_SOURCE_DIR} b)
